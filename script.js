@@ -1,11 +1,11 @@
 'use strict';
 /* Все сведения о компании меняются здесь. Пустые контакты не создают ссылок.
-   Telegram: имя без @ или полный адрес https://t.me/username.
+   MAX: укажите полную HTTPS-ссылку на профиль в maxUrl.
    Дополнительные контакты: { label: 'Email', value: 'mail@example.ru', href: 'mailto:mail@example.ru' }.
    Для своих проектов замените фото и установите demo: false. */
 const CONFIG = {
   companyName: '[НАЗВАНИЕ КОМПАНИИ]',
-  phone: '', telegram: '', extraContacts: [],
+  phone: '+7 909 502-56-06', maxUrl: '', extraContacts: [],
   region: 'Алтайский край', city: '', districts: [],
   owner: '', experience: '', legal: '',
   services: [
@@ -39,9 +39,36 @@ dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog
 dialog.addEventListener('close',()=>{document.body.classList.remove('modal-open');if(opener)opener.focus();});
 function link(text,href){const a=element('a','',text);a.href=href;if(href.startsWith('https:')){a.target='_blank';a.rel='noopener noreferrer';}return a;}
 const phone=CONFIG.phone.replace(/[^\d+]/g,'');
-if(document.getElementById('phone') && /^\+?\d{7,15}$/.test(phone)){document.getElementById('phone').replaceChildren(link(CONFIG.phone,'tel:'+phone));const call=link('Позвонить','tel:'+phone);call.className='button primary';document.getElementById('call-action').replaceChildren(call);const header=document.querySelector('.header-contact');header.textContent=CONFIG.phone;header.href='tel:'+phone;}
-const telegram=CONFIG.telegram.trim().replace(/^https:\/\/t\.me\//,'').replace(/^@/,'');
-if(document.getElementById('telegram') && /^[a-zA-Z0-9_]{5,32}$/.test(telegram)){document.getElementById('telegram').replaceChildren(link('@'+telegram,'https://t.me/'+telegram));if(!/^\+?\d{7,15}$/.test(phone)){const message=link('Написать в Telegram','https://t.me/'+telegram);message.className='button primary';document.getElementById('call-action').replaceChildren(message);}}
+async function copyPhoneNumber(value){
+ if(navigator.clipboard && window.isSecureContext){
+  try{await navigator.clipboard.writeText(value);return true;}catch(e){}
+ }
+ // Fallback for local files and browsers without Clipboard API permissions.
+ const previous=document.activeElement;
+ const input=document.createElement('textarea');input.value=value;
+ input.setAttribute('readonly','');input.setAttribute('aria-label','Номер телефона для копирования');
+ input.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0';
+ document.body.append(input);input.focus();input.select();input.setSelectionRange(0,value.length);
+ let copied=false;try{copied=document.execCommand('copy');}catch(e){}
+ input.remove();if(previous)previous.focus();return copied;
+}
+if(document.getElementById('phone') && /^\+?\d{7,15}$/.test(phone)){
+ const button=element('button','copy-phone',CONFIG.phone);button.type='button';
+ button.setAttribute('aria-label','Скопировать номер '+CONFIG.phone);
+ button.append(svg('M9 9h12v12H9zM15 5V3H3v12h2'));
+ const status=element('span','copy-status','Нажмите, чтобы скопировать');
+ status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+ button.addEventListener('click',async()=>{const copied=await copyPhoneNumber(phone);status.textContent=copied?'Номер скопирован':'Не удалось скопировать. Выделите номер и скопируйте вручную.';});
+ document.getElementById('phone').replaceChildren(button,status);
+ const call=link('Позвонить','tel:'+phone);call.className='button primary';
+ document.getElementById('call-action').replaceChildren(call);
+}
+const maxContact=document.getElementById('max');
+if(maxContact && CONFIG.maxUrl){
+ try{const url=new URL(CONFIG.maxUrl);if(url.protocol==='https:'&&url.hostname==='max.ru'){
+  maxContact.replaceChildren(link('Написать в MAX',url.href));
+ }}catch(e){}
+}
 if(document.getElementById('extra-contacts')) CONFIG.extraContacts.forEach(contact=>{const row=element('p');row.append(element('span','contact-label',contact.label));if(/^(https:\/\/|mailto:|tel:)/i.test(contact.href||''))row.append(link(contact.value,contact.href));else row.append(document.createTextNode(contact.value));document.getElementById('extra-contacts').append(row);});
 const toggle=document.getElementById('theme-toggle'),system=matchMedia('(prefers-color-scheme: dark)');
 const themeState=window.siteTheme;

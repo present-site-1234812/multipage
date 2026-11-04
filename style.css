@@ -8,3 +8,5 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 
 @media(min-width:1101px){.header-contact.available{display:inline-flex;padding:9px 14px;border:1px solid var(--line);font-size:14px}}
+
+.copy-phone{display:inline-flex;align-items:center;gap:12px;min-height:44px;padding:4px 0;border:0;background:transparent;color:var(--text);font:inherit;font-weight:600;text-align:left;cursor:pointer;user-select:text;-webkit-user-select:text}.copy-phone svg{width:19px;height:19px;color:var(--accent-text)}.copy-status{display:block;font-size:12px;color:var(--muted);margin-top:4px}@media(hover:hover) and (pointer:fine){.copy-phone:hover{color:var(--accent-text)}}
