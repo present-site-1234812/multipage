@@ -56,7 +56,7 @@ if(document.getElementById('phone') && /^\+?\d{7,15}$/.test(phone)){
  const button=element('button','copy-phone',CONFIG.phone);button.type='button';
  button.setAttribute('aria-label','Скопировать номер '+CONFIG.phone);
  button.append(svg('M9 9h12v12H9zM15 5V3H3v12h2'));
- const status=element('span','copy-status','Нажмите, чтобы скопировать');
+ const status=element('span','copy-status');
  status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  button.addEventListener('click',async()=>{const copied=await copyPhoneNumber(phone);status.textContent=copied?'Номер скопирован':'Не удалось скопировать. Выделите номер и скопируйте вручную.';});
  document.getElementById('phone').replaceChildren(button,status);
@@ -91,7 +91,7 @@ function applyTheme(theme){
  document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;
  toggle.setAttribute('aria-pressed',String(theme==='dark'));
  toggle.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');
- document.querySelector('meta[name="theme-color"]').content=theme==='dark'?'#151A19':'#FFFFFF';
+ document.querySelector('meta[name="theme-color"]').content=theme==='dark'?'#151A19':'#EDF3EE';
  syncThemeLinks(theme);
 }
 applyTheme(document.documentElement.dataset.theme);
@@ -127,4 +127,3 @@ if(mobile.addEventListener)mobile.addEventListener('change',resetMenu);else mobi
 // Content stays visible without JS or if IntersectionObserver is unavailable.
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('reveal-once');observer.unobserve(entry.target);}});},{threshold:.08});document.querySelectorAll('main>.editorial').forEach(section=>observer.observe(section));}
 
-if(/^\+?\d{7,15}$/.test(phone)){const headerCall=document.querySelector(".header-contact");headerCall.textContent="Связаться";headerCall.href="tel:"+phone;headerCall.classList.add("available");}
