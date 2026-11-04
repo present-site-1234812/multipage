@@ -70,7 +70,7 @@ if(maxContact && CONFIG.maxUrl){
  }}catch(e){}
 }
 if(document.getElementById('extra-contacts')) CONFIG.extraContacts.forEach(contact=>{const row=element('p');row.append(element('span','contact-label',contact.label));if(/^(https:\/\/|mailto:|tel:)/i.test(contact.href||''))row.append(link(contact.value,contact.href));else row.append(document.createTextNode(contact.value));document.getElementById('extra-contacts').append(row);});
-const toggle=document.getElementById('theme-toggle'),system=matchMedia('(prefers-color-scheme: dark)');
+const toggle=document.getElementById('theme-toggle');
 const themeState=window.siteTheme;
 let manual=themeState.manual;
 function syncThemeLinks(theme){
@@ -101,12 +101,10 @@ toggle.addEventListener('click',()=>{
  try{localStorage.setItem(themeState.key,next);}catch(e){}
  applyTheme(next);
 });
-const onSystemChange=event=>{if(!manual)applyTheme(event.matches?'dark':'light');};
-if(system.addEventListener)system.addEventListener('change',onSystemChange);else system.addListener(onSystemChange);
 function restoreSavedTheme(){
  let saved=null;try{saved=localStorage.getItem(themeState.key);}catch(e){}
  if(themeState.portable){const query=new URLSearchParams(location.search).get('theme');if(query==='light'||query==='dark')saved=query;}
- manual=saved==='light'||saved==='dark';applyTheme(manual?saved:system.matches?'dark':'light');
+ manual=saved==='light'||saved==='dark';applyTheme(manual?saved:'dark');
 }
 window.addEventListener('storage',event=>{if(event.key===themeState.key||event.key===null)restoreSavedTheme();});
 window.addEventListener('pageshow',event=>{if(event.persisted)restoreSavedTheme();});

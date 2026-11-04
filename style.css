@@ -32,3 +32,13 @@ html[data-theme="dark"] .premium-hero:after{opacity:1}
 html[data-theme="dark"] .premium-hero:before{opacity:0}
 @media(max-width:800px){.premium-hero:after{background:linear-gradient(90deg,rgba(10,25,19,.74),rgba(10,25,19,.61) 65%,rgba(10,25,19,.35))}}
 @media(prefers-reduced-motion:reduce){.premium-hero:before,.premium-hero:after{transition:none}}
+
+/* Both themes use the same green gradient; light has half its opacity. */
+html[data-theme="light"] .premium-hero:after{opacity:.5}
+html[data-theme="light"] .premium-hero:before{opacity:0}
+
+/* White outline and the same text shadow as the hero heading. */
+.hero-content .secondary{
+ background:transparent;color:var(--white);border-color:var(--white);
+ text-shadow:0 2px 6px rgba(10,25,19,.65);box-shadow:none;
+}

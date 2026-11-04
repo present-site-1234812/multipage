@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-theme="dark" style="color-scheme:dark">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -14,11 +14,11 @@ var portable=location.protocol==='file:'||!available;
 var query=new URLSearchParams(location.search).get('theme');
 if(portable&&(query==='light'||query==='dark')){t=query;try{localStorage.setItem(key,t);}catch(e){}}
 var manual=t==='light'||t==='dark';
-if(!manual)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+if(!manual)t='dark';
 window.siteTheme={key:key,portable:portable,manual:manual};
 document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;
 })();</script>
-<link rel="stylesheet" href="style.css?v=20261105-theme-tint"><script src="script.js?v=20261105-no-header-contact" defer></script>
+<link rel="stylesheet" href="style.css?v=20261105-white-shadow-button"><script src="script.js?v=20261105-dark-default" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Перейти к содержимому</a>
